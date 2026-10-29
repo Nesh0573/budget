@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html><head><base target="_top"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#123524"><meta name="color-scheme" content="light dark">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0E1A14;--forest:#123524;--moss:#3E7B4F;--sun:#E0A526;--teal:#3F8F9B;--mist:#EAF0EA;--surf:#fff;--line:#d6dfd6;--mut:#62736a;--red:#C8452D;--r:18px}
+@media(prefers-color-scheme:dark){:root{--ink:#E6EEE8;--mist:#0A130E;--surf:#12211A;--line:#21392b;--mut:#8EA396;--forest:#0D2A1C}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:Figtree,"Segoe UI",Roboto,Arial,sans-serif;background:var(--mist);color:var(--ink);padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+h1,h2,.big{font-family:"Bricolage Grotesque","Segoe UI",Arial,sans-serif;letter-spacing:-.02em}
+#hero{background:var(--forest) radial-gradient(circle at 105% -10%,#2c6b49 0,transparent 55%),radial-gradient(circle at -10% 110%,#1b4a33 0,transparent 50%);color:#fff;padding:calc(14px + env(safe-area-inset-top)) 18px 22px;border-radius:0 0 30px 30px}
+.top{display:flex;align-items:center;gap:10px}.top svg{width:30px;height:30px;flex:none}
+.top b{font-size:15px;font-weight:600;flex:1}.pill{border:1px solid #ffffff55;background:#ffffff14;color:#fff;border-radius:99px;padding:6px 12px;font-size:13px;font-family:inherit}
+.gauge{position:relative;width:260px;max-width:100%;margin:6px auto 0}.gauge svg{display:block;width:100%}
+.gauge .mid{position:absolute;left:0;right:0;bottom:2px;text-align:center}
+.mid small{display:block;opacity:.75;font-size:13px}.big{font-size:34px;font-weight:700;line-height:1.1}
+.sub{text-align:center;font-size:13px;opacity:.8;margin-top:6px}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.tri div{background:#ffffff12;border-radius:14px;padding:10px;font-size:12px}.tri b{display:block;font-size:14px;margin-top:2px}.tri i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+main{padding:16px;max-width:640px;margin:auto}
+h2{font-size:16px;margin:18px 4px 8px;font-weight:600}
+.panel{background:var(--surf);border-radius:var(--r);overflow:hidden}
+.item{display:flex;gap:12px;padding:13px 14px;border-bottom:1px solid var(--line)}.item:last-child{border:0}
+.ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:19px;flex:none}
+.body{flex:1;min-width:0}.row{display:flex;justify-content:space-between;gap:8px;font-size:14px}.row b{font-weight:600}
+.m{color:var(--mut);font-size:12px}.bar{height:7px;background:var(--line);border-radius:4px;margin:7px 0 5px;overflow:hidden}.bar i{display:block;height:100%;border-radius:4px;transition:width .5s}
+.bad{color:var(--red)}.ok{color:var(--moss)}
+.seg{display:flex;background:var(--surf);border-radius:14px;padding:4px;gap:4px}.seg button{flex:1;border:0;background:none;padding:10px;border-radius:11px;font:600 14px Figtree,Arial;color:var(--mut)}.seg .on{background:var(--forest);color:#fff}
+.amt{width:100%;border:0;background:none;font:700 44px "Bricolage Grotesque",Arial;color:var(--ink);padding:6px 0;outline:none}
+.field{width:100%;border:1px solid var(--line);background:var(--surf);color:var(--ink);border-radius:12px;padding:12px;font:16px Figtree,Arial;margin-top:8px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px}.chips button{flex:none;border:1px solid var(--line);background:var(--surf);color:var(--ink);border-radius:99px;padding:9px 14px;font:500 14px Figtree,Arial}.chips .on{background:var(--forest);color:#fff;border-color:var(--forest)}
+.go{width:100%;border:0;border-radius:14px;padding:15px;margin-top:12px;background:var(--sun);color:#1b1304;font:700 16px Figtree,Arial}
+.alert{background:#E0A52622;border-left:4px solid var(--sun);border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px}.alert.good{background:#3E7B4F22;border-color:var(--moss)}
+.stack{display:flex;height:14px;border-radius:7px;overflow:hidden;margin:4px 0 2px}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--surf);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+nav button{flex:1;border:0;background:none;color:var(--mut);font:500 12px Figtree,Arial;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0}
+nav button.on{color:var(--moss);font-weight:600}nav svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#fab{position:fixed;right:18px;bottom:calc(84px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:50%;border:0;background:var(--sun);color:#1b1304;font-size:32px;box-shadow:0 6px 16px #0005}
+#bar{display:none;margin:12px 16px 0;padding:9px 12px;border-radius:12px;background:#E0A52633;font-size:13px}
+#toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--mist);padding:10px 18px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s}#toast.show{opacity:1}
+@media(prefers-reduced-motion:reduce){.bar i,#toast{transition:none}}
+</style></head><body>
+<header id="hero"></header><div id="bar"></div><main id="app"></main>
+<button id="fab" onclick="tab='add';render()" aria-label="Add entry">+</button>
+<nav id="nav"></nav><div id="toast"></div>
+<script>
+var S=null,tab='budget',mode='expense',Q=[],F={},editing=false;
+var GC={Needs:'#3E7B4F',Wants:'#E0A526',Savings:'#3F8F9B'};
+var EM={'Housing / Rent':'🏠','Food & Groceries':'🍲','Transport':'🚌','Utilities & Data':'💡','Health & Insurance':'🩺','Dining & Entertainment':'🍽️','Shopping':'🛍️','Family & Giving':'🎁','Personal & Misc':'✨','Emergency Fund':'🛟','Investments':'📈','Goals':'🎯'};
+var SEG=['#3E7B4F','#6BA37A','#9CC5A1','#E0A526','#F0C868','#3F8F9B','#B8553A'];
+var LOGO='<svg viewBox="0 0 512 512"><rect width="512" height="512" rx="116" fill="#1D5A3C"/><rect x="124" y="296" width="72" height="116" rx="18" fill="#E5AE3A" opacity=".7"/><rect x="220" y="236" width="72" height="176" rx="18" fill="#E5AE3A" opacity=".85"/><rect x="316" y="168" width="72" height="244" rx="18" fill="#F0BE4A"/><path d="M352 160C336 118 356 82 408 68C416 120 392 156 352 160Z" fill="#A6E3B2"/><path d="M352 160C324 150 304 128 300 100C334 102 358 126 352 160Z" fill="#6FBF86"/></svg>';
+var NAV={budget:'<path d="M12 3v9h9a9 9 0 1 1-9-9z"/>',savings:'<ellipse cx="12" cy="6.5" rx="7" ry="3"/><path d="M5 6.5v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5M5 11.5v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/>',invest:'<path d="M3 17l6-6 4 4 8-8M15 7h6v6"/>'};
+var $=function(i){return document.getElementById(i)};
+function ls(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+function esc(t){var d=document.createElement('div');d.textContent=t==null?'':t;return d.innerHTML}
+function kes(n){return 'KES '+Math.round(Number(n)||0).toLocaleString()}
+function pc(n,d){return (Number(n)*100).toFixed(d==null?1:d)+'%'}
+function today(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function toast(m){var t=$('toast');t.textContent=m;t.className='show';setTimeout(function(){t.className=''},2200)}
+
+function send(items){Q=Q.concat(items);ls('q',Q);status();flush()}
+function flush(){
+  if(!Q.length||!navigator.onLine)return;var batch=Q.slice();
+  google.script.run.withSuccessHandler(function(st){
+    Q=Q.filter(function(x){return batch.indexOf(x)<0});ls('q',Q);S=st;ls('s',st);status();render()
+  }).withFailureHandler(status).addEntries(batch);
+}
+function load(){google.script.run.withSuccessHandler(function(st){S=st;ls('s',st);render();flush()}).withFailureHandler(status).getState()}
+function status(){
+  var b=$('bar');
+  if(Q.length||!navigator.onLine){b.style.display='block';b.textContent=(navigator.onLine?'':'You are offline. ')+Q.length+' entr'+(Q.length==1?'y':'ies')+' saved on this phone and waiting to sync.'}
+  else b.style.display='none';
+}
+window.addEventListener('online',function(){flush();load()});window.addEventListener('offline',status);
+
+function grp(g){var a=0,u=0;S.cats.forEach(function(c){if(c.group==g){a+=c.alloc;u+=c.used}});return{a:a,u:u}}
+function daysLeft(){
+  var n=new Date();if(S.month!==n.toLocaleString('en',{month:'long',year:'numeric'}))return 0;
+  return new Date(n.getFullYear(),n.getMonth()+1,0).getDate()-n.getDate()+1;
+}
+function top(title){return '<div class="top">'+LOGO+'<b>'+title+'</b>'+(tab=='budget'?'<button class="pill" onclick="editing=!editing;render()">'+(editing?'Close':'Change amount')+'</button>':'')+'</div>'}
+function heroBudget(){
+  var n=grp('Needs'),w=grp('Wants'),s=grp('Savings'),A=n.a+w.a,U=n.u+w.u,left=A-U,f=A?Math.min(1,U/A):0,L=Math.PI*90,dl=daysLeft();
+  var h=top(esc(S.month))+(editing?'<div style="margin-top:12px;display:flex;gap:8px"><input id="amt" class="field" style="margin:0" type="number" inputmode="numeric" value="'+S.amount+'"><button class="pill" style="background:var(--sun);color:#1b1304;border:0;font-weight:700" onclick="send([{type:\'budget\',amount:$(\'amt\').value}]);editing=false;toast(\'Budget updated\')">Save</button></div>':'')+
+   '<div class="gauge"><svg viewBox="0 0 220 125"><path d="M20 110A90 90 0 0 1 200 110" fill="none" stroke="#ffffff26" stroke-width="14" stroke-linecap="round"/><path d="M20 110A90 90 0 0 1 200 110" fill="none" stroke="'+(left<0?'#FF7A5C':'#E0A526')+'" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+(f*L)+' '+L+'"/></svg>'+
+   '<div class="mid"><small>'+(left<0?'Over budget by':'Left to spend')+'</small><div class="big">'+kes(Math.abs(left))+'</div></div></div>'+
+   '<div class="sub">'+(dl&&left>0?dl+' days left, about '+kes(left/dl)+' a day':'of '+kes(A)+' for needs and wants')+'</div><div class="tri">';
+  [['Needs',n],['Wants',w],['Savings',s]].forEach(function(x){h+='<div><i style="background:'+GC[x[0]]+'"></i>'+(x[0]=='Savings'?'Saved':x[0])+'<b>'+kes(x[1].u)+'</b><span style="opacity:.7">of '+kes(x[1].a)+'</span></div>'});
+  return h+'</div>';
+}
+function render(){
+  if(!S)return;
+  $('hero').innerHTML=tab=='budget'?heroBudget():tab=='savings'?top('Savings')+'<div class="sub" style="margin-top:14px">Total saved</div><div class="big" style="text-align:center;margin-top:2px">'+kes(S.savings[3][1])+'</div><div class="sub">across all buckets</div>':
+   tab=='invest'?top('Invest')+'<div class="tri" style="grid-template-columns:1fr 1fr"><div>Central Bank Rate<b>'+pc(S.market.cbr,2)+'</b></div><div>Inflation<b>'+pc(S.market.infl)+'</b></div></div>':top('New entry');
+  $('nav').innerHTML=['budget','savings','invest'].map(function(t){return '<button class="'+(t==tab?'on':'')+'" onclick="tab=\''+t+'\';render()"><svg viewBox="0 0 24 24">'+NAV[t]+'</svg>'+{budget:'Budget',savings:'Savings',invest:'Invest'}[t]+'</button>'}).join('');
+  $('fab').style.display=tab=='add'?'none':'block';
+  $('app').innerHTML=({budget:vBudget,add:vAdd,savings:vSavings,invest:vInvest})[tab]();
+  window.scrollTo(0,0);
+}
+function vBudget(){
+  var h='';
+  ['Needs','Wants','Savings'].forEach(function(g){
+    h+='<h2>'+g+'</h2><div class="panel">';
+    S.cats.filter(function(c){return c.group==g}).forEach(function(c){
+      var p=c.pct||0,col=p>1?'var(--red)':p>.8?'var(--sun)':GC[g],sv=g=='Savings';
+      h+='<div class="item"><div class="ic" style="background:'+GC[g]+'22">'+(EM[c.name]||'•')+'</div><div class="body"><div class="row"><b>'+esc(c.name)+'</b><span class="'+(c.left<0&&!sv?'bad':'')+'">'+(c.left<0&&!sv?'over by '+kes(-c.left):kes(c.left)+(sv?' to go':' left'))+'</span></div>'+
+        '<div class="bar"><i style="width:'+Math.min(100,p*100)+'%;background:'+col+'"></i></div><div class="m">'+(sv?'saved ':'spent ')+kes(c.used)+' of '+kes(c.alloc)+' ('+pc(c.share,0)+')</div></div></div>'});
+    h+='</div>'});
+  return h;
+}
+function vAdd(){
+  var ex=mode=='expense',list=S.cats.filter(function(c){return ex?c.group!='Savings':c.group=='Savings'});F.cat=list[0].name;
+  var h='<div class="seg"><button class="'+(ex?'on':'')+'" onclick="mode=\'expense\';render()">Expense</button><button class="'+(!ex?'on':'')+'" onclick="mode=\'saving\';render()">Saving</button></div>'+
+   '<div class="panel" style="padding:14px;margin-top:12px"><div class="m">Amount (KES)</div><input id="a" class="amt" type="number" inputmode="decimal" placeholder="0">'+
+   '<div class="chips">'+list.map(function(c,i){return '<button class="'+(i?'':'on')+'" data-v="'+esc(c.name)+'" onclick="pick(this)">'+(EM[c.name]||'')+' '+esc(c.name)+'</button>'}).join('')+'</div>'+
+   '<input id="d" class="field" type="date" value="'+today()+'">';
+  if(!ex)h+='<select id="w" class="field"><option value="">Where is it held?</option>'+S.invest.rows.map(function(r){return '<option>'+esc(r[0])+'</option>'}).join('')+'</select>';
+  return h+'<input id="n" class="field" placeholder="Note (optional)"><button class="go" onclick="addEntry()">Save '+(ex?'expense':'saving')+'</button></div>';
+}
+function pick(el){F.cat=el.dataset.v;[].forEach.call(el.parentNode.children,function(b){b.className=b==el?'on':''})}
+function addEntry(){
+  var a=Number($('a').value);if(!(a>0)){toast('Enter an amount first');return}
+  send([{id:uid(),type:mode,date:$('d').value,category:F.cat,amount:a,where:$('w')?$('w').value:'',note:$('n').value}]);
+  $('a').value='';$('n').value='';toast(navigator.onLine?'Saved':'Saved offline, will sync');
+}
+function vSavings(){
+  var h='<div class="panel">',tot=0;
+  S.savings.slice(0,3).forEach(function(r){
+    var t=typeof r[2]=='number'&&r[2]>0;
+    h+='<div class="item"><div class="ic" style="background:#3F8F9B22">'+(EM[r[0]]||'•')+'</div><div class="body"><div class="row"><b>'+esc(r[0])+'</b><span>'+kes(r[1])+(t?' of '+kes(r[2]):'')+'</span></div>'+(t?'<div class="bar"><i style="width:'+(r[3]*100)+'%;background:#3F8F9B"></i></div><div class="m">'+pc(r[3],0)+' of target</div>':'')+'</div></div>'});
+  h+='</div><h2>Where it is held</h2><div class="panel">';
+  S.held.forEach(function(r){if(r[1]>0||r[0]!='Other / unassigned')h+='<div class="item" style="padding:11px 14px"><div class="row" style="width:100%"><span>'+esc(r[0])+'</span><b>'+kes(r[1])+'</b></div></div>'});
+  return h+'</div>';
+}
+function vInvest(){
+  var I=S.invest,low=/fill/.test(I.status);
+  var h='<div class="alert '+(low?'':'good')+'">'+esc(I.status)+'</div><div class="seg">'+['Conservative','Balanced','Growth'].map(function(x){return '<button class="'+(x==I.profile?'on':'')+'" onclick="send([{type:\'profile\',value:\''+x+'\'}]);I.profile=\''+x+'\';render()">'+x+'</button>'}).join('')+'</div>'+
+   '<div class="panel" style="padding:14px;margin-top:12px"><div class="row"><span>This month</span><b>'+kes(I.total-I.extra)+'</b></div><div class="m" style="margin-top:8px">Extra lump sum to invest (KES)</div>'+
+   '<input class="field" style="margin-top:4px" type="number" inputmode="numeric" value="'+I.extra+'" onchange="send([{type:\'extra\',amount:this.value}])">'+
+   '<div class="row" style="margin-top:12px"><span>Total to invest</span><b>'+kes(I.total)+'</b></div><div class="stack" style="margin-top:12px">'+I.rows.map(function(r,i){return '<i style="width:'+(r[7]*100)+'%;background:'+SEG[i]+'"></i>'}).join('')+'</div></div>'+
+   '<h2>Suggested split</h2><div class="panel">';
+  I.rows.forEach(function(r,i){if(r[7]<=0)return;
+    h+='<div class="item"><div class="ic" style="background:'+SEG[i]+'33"><span style="width:12px;height:12px;border-radius:50%;background:'+SEG[i]+'"></span></div><div class="body"><div class="row"><b>'+esc(r[0])+'</b><b>'+kes(r[8])+'</b></div>'+
+    '<div class="m">'+pc(r[7],0)+' | rate '+pc(r[1],2)+' | after tax '+pc(r[3],2)+' | real '+pc(r[4],2)+'</div><div class="m">Risk: '+esc(r[5])+(r[9]=='OK'?'':' | <span class="bad">'+esc(r[9])+'</span>')+'</div></div></div>'});
+  return h+'</div><div class="panel" style="padding:14px;margin-top:12px"><div class="row"><span>Blended after-tax yield</span><b>'+pc(I.blended,2)+'</b></div><div class="row" style="margin-top:6px"><span>Estimated 12-month return</span><b>'+kes(I.est)+'</b></div></div>'+
+   '<p class="m" style="margin:12px 4px">A general guide, not financial advice. Rates change weekly; update them in the Invest tab of your sheet.</p>';
+}
+Q=ls('q')||[];S=ls('s');if(S)render();status();load();
+</script></body></html>
