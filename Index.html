@@ -41,7 +41,7 @@ nav button.on{color:var(--moss);font-weight:600}nav svg{width:23px;height:23px;f
 #toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--mist);padding:10px 18px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s}#toast.show{opacity:1}
 @media(prefers-reduced-motion:reduce){.bar i,#toast{transition:none}}
 </style></head><body>
-<header id="hero"></header><div id="bar"></div><main id="app"></main>
+<header id="hero"></header><div id="bar"></div><main id="app"><p class="m" style="padding:40px 0;text-align:center">Loading your budget...</p></main>
 <button id="fab" onclick="tab='add';render()" aria-label="Add entry">+</button>
 <nav id="nav"></nav><div id="toast"></div>
 <script>
@@ -64,10 +64,14 @@ function send(items){Q=Q.concat(items);ls('q',Q);status();flush()}
 function flush(){
   if(!Q.length||!navigator.onLine)return;var batch=Q.slice();
   google.script.run.withSuccessHandler(function(st){
-    Q=Q.filter(function(x){return batch.indexOf(x)<0});ls('q',Q);S=st;ls('s',st);status();render()
-  }).withFailureHandler(status).addEntries(batch);
+    Q=Q.filter(function(x){return batch.indexOf(x)<0});ls('q',Q);gotState(st);status()
+  }).withFailureHandler(function(e){status();toast('Sync failed, will retry')}).addEntries(batch);
 }
-function load(){google.script.run.withSuccessHandler(function(st){S=st;ls('s',st);render();flush()}).withFailureHandler(status).getState()}
+function gotState(st){
+  try{S=JSON.parse(st);ls('s',S)}catch(e){if(!S)showErr('The sheet returned no data. Check the four tab names, then run getState in Apps Script.');return false}
+  render();return true
+}
+function load(){google.script.run.withSuccessHandler(function(st){if(gotState(st))flush()}).withFailureHandler(function(e){status();if(!S)showErr(e)}).getState()}
 function status(){
   var b=$('bar');
   if(Q.length||!navigator.onLine){b.style.display='block';b.textContent=(navigator.onLine?'':'You are offline. ')+Q.length+' entr'+(Q.length==1?'y':'ies')+' saved on this phone and waiting to sync.'}
@@ -90,7 +94,9 @@ function heroBudget(){
   [['Needs',n],['Wants',w],['Savings',s]].forEach(function(x){h+='<div><i style="background:'+GC[x[0]]+'"></i>'+(x[0]=='Savings'?'Saved':x[0])+'<b>'+kes(x[1].u)+'</b><span style="opacity:.7">of '+kes(x[1].a)+'</span></div>'});
   return h+'</div>';
 }
-function render(){
+function showErr(e){$('app').innerHTML='<div class="alert"><b>Could not load your budget.</b><br>'+esc(e&&e.message?e.message:e)+'</div>'}
+function render(){try{render0()}catch(e){showErr(e)}}
+function render0(){
   if(!S)return;
   $('hero').innerHTML=tab=='budget'?heroBudget():tab=='savings'?top('Savings')+'<div class="sub" style="margin-top:14px">Total saved</div><div class="big" style="text-align:center;margin-top:2px">'+kes(S.savings[3][1])+'</div><div class="sub">across all buckets</div>':
    tab=='invest'?top('Invest')+'<div class="tri" style="grid-template-columns:1fr 1fr"><div>Central Bank Rate<b>'+pc(S.market.cbr,2)+'</b></div><div>Inflation<b>'+pc(S.market.infl)+'</b></div></div>':top('New entry');
